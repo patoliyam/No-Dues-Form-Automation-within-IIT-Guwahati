@@ -27,47 +27,41 @@ def login_user(request):
                 login(request, user)
                 #print role+'1'
                 role = str(role)
-                # print type(Student.webmail)
-                username=str(username)
+                #print type(Student.webmail)
                 if role == "Student":
-                    return render((stud_profile), username)
-                    #url = reverse('stud_profile', kwargs={'username': username})
-                    #return HttpResponseRedirect(url)
+                    student = Student.objects.get(webmail=username)
+                    return redirect('/stud_profile')
+                elif role == "Library":
+                    pass
+            else:
                 return render(request, 'main/login.html', {'error_message': 'Unsuccessful Login'})
         else:
             return render(request, 'main/login.html', {'error_message': 'Invalid login'})
     return render(request, 'main/login.html',{'error_message': 'Valid login it was!'})
 
-def stud_profile(request, username):
-    username=request.POST['username']
-    stud = Student.objects.filter(webmail=username)
+def stud_profile(request):
+    username=request.user.username
+    username=str(username)
+    student = Student.objects.get(webmail=username)
+    return render(request, 'main/stud.html', {'error_message': 'valid login', 'student': student})
 
-    return render(request, 'main/stud.html',caretaker_approval = Student.objects.filter(webmail=username).values('caretaker_approval')
-    #print caretaker_approval
-    warden_approval = Student.objects.filter(webmail=username).values('warden_approval')
-    gymkhana_approval = Student.objects.filter(webmail=username).values('gymkhana_approval')
-    library_approval = Student.objects.filter(webmail=username).values('library_approval')
-    CC_approval = Student.objects.filter(webmail=username).values('CC_approval')
-    assistant_registrar_approval = Student.objects.filter(webmail=username).values('assistant_registrar_approval')
-    HOD_approval = Student.objects.filter(webmail=username).values('HOD_approval')
-    account_approval = Student.objects.filter(webmail=username).values('account_approval')
-    submit_thesis = Student.objects.filter(webmail=username).values('submit_thesis')
-    online_cc_approval = Student.objects.filter(webmail=username).values('online_cc_approval')
-    #department = Student.objects.filter(webmail=username).values('department')
-    name = Student.objects.filter(webmail=username).values('name')
-    dept_status = stud[0].dept_status()
-    lab_status = stud[0].lab_status()
-                  {'error_message': 'valid login1', 'lab_status': str(lab_status), 'dept_status': str(dept_status),
-                   'name': str(name[0]['name']), 'online_cc_approval': str(online_cc_approval[0]['online_cc_approval']),
-                   'submit_thesis': str(submit_thesis[0]['submit_thesis']),
-                   'caretaker_approval': str(caretaker_approval[0]['caretaker_approval']),
-                   'warden_approval': str(warden_approval[0]['warden_approval']),
-                   'gymkhana_approval': str(gymkhana_approval[0]['gymkhana_approval']),
-                   'library_approval': str(library_approval[0]['library_approval']),
-                   'CC_approval': str(CC_approval[0]['CC_approval']),
-                   'assistant_registrar_approval': str(assistant_registrar_approval[0]['assistant_registrar_approval']),
-                   'HOD_approval': str(HOD_approval[0]['HOD_approval']),
-                   account_approval: str(account_approval[0]['account_approval'])})
+
+def stud_full_dept(request):
+    username = request.user.username
+    username=str(username)
+    student = Student.objects.get(webmail=username)
+    faculty_dept = Faculty.objects.filter(department=student.department)
+    stud_fac_status = Stud_Faculty_Status.objects.filter(student=student)
+    return render(request, 'main/stud_full_dept.html', {'error_message': 'valid login', 'student': student, 'faculty':faculty_dept,'Stud_Faculty_Status':stud_fac_status})
+
+
+def stud_full_lab(request):
+    username = request.user.username
+    username = str(username)
+    student = Student.objects.filter(webmail=username)
+    labs = Lab.objects.all()
+    stud_lab_status = Stud_Lab_Status.objects.filter(student=student)
+    return render(request, 'main/stud_full_lab.html', {'error_message': 'valid login', 'student': student, 'labs' : labs, 'Stud_Lab_Status':stud_lab_status})
 
 
 def logout_user(request):
@@ -78,12 +72,23 @@ def logout_user(request):
     }
     return render(request, 'main/login.html', context)
 
-def stud_full_dept(request):
-    #thisstud = Student.objects.get(pk=album_id)
-    #album.delete()
-    #albums = Album.objects.filter(user=request.user)
+def faculty_admin(request):
+    username=request.user.username
+    faculty = Faculty.objects.get(webmail=username)
+    stud_fac_status = Stud_Faculty_Status.objects.filter(faculty=username)
+    for i in stud_fac_status :
+        Stud_Faculty_Status.objects.get(faculty=username,student=i.student).faculty_approval=request.POST[i.student]
 
-    return render(request, 'main/stud_full_dept.html', {'error_message': 'logged in successfully'})
+def library_admin(request):
+    username = request.user.username
+    #take inputs of user by request.POST
+    if request.method == "POST":
+        for i in Student:
+            approval = request.POST[Student1]
+            s = Student.objects.get(webmail=student1)
+            s.library_approval = approval
+
+
 '''
 def index(request):
     if not request.user.is_authenticated():
