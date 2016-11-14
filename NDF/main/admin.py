@@ -12,10 +12,12 @@ class Stud_Lab_StatusInline(admin.TabularInline):
 
 class FacultyAdmin(admin.ModelAdmin):
     search_fields = ['name']
+    inlines = (Stud_Faculty_StatusInline,)
     list_display = ('name','department',)
 
 class LabAdmin(admin.ModelAdmin):
     search_fields = ['name','webmail',]
+    inlines = (Stud_Lab_StatusInline,)
     list_display = ('name','webmail',)
 
 class StudentAdmin(admin.ModelAdmin):

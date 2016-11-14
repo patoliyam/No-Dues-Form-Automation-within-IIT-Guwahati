@@ -1,10 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'main/base.html' %}
 
-</body>
-</html>
+{% block title %}
+    {{ cc.name }} Incharge |Home Page
+{% endblock %}
+
+{% block heading %}
+    Students with No Online CC Dues
+{% endblock %}
+
+{% block form-action %}
+    {% url 'main:cc_profile'%}
+{% endblock %}
+
+{% block NotApproved %}
+      {%for stud in students %}
+          {% if stud.cc_approval is False %}
+                         <p align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="{{ stud.webmail }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ stud.name }}</p>
+          {% endif %}
+      {% endfor %}
+{% endblock %}
+{% block Approved %}
+      {%for stud in students %}
+          {% if stud.cc_approval is True %}
+                         <p align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" checked name="{{ stud.webmail }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ stud.name }}</p>
+          {% endif %}
+      {% endfor %}
+{% endblock %}

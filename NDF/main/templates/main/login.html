@@ -1,11 +1,21 @@
-{% block title %}No Dues Automation | Log In{% endblock %}
-{% block login_active %}active{% endblock %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>No Dues Automation | Log In</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    </head>
 
-{% block body %}
+<body>
+<nav>
+        <div class="container-fluid text-center">
+             <h2>No Dues Form Automation IIT Guwahati</h2>
+        </div>
+</nav>
 
-<div class="container-fluid">
-
+<div class="container-fluid align-center" >
     <div class="row">
+        <div class="col-md-3">
+        </div>
         <div class="col-sm-12 col-md-6">
             <div class="panel panel-default">
                 <div class="panel-body">
@@ -27,8 +37,8 @@
                             <label class="control-label col-sm-2" for="id_role">
                                 Role:
                             </label>
-                            <div class="col-sm-10">
-                               <select  id = "id_role" class="control-label col-sm-2" name = "role">
+                            <div class="col-sm-8">
+                               <select  id = "id_role" class="control-label col-sm-5" name = "role">
                                   <option value="Student">Student</option>
                                   <option value="Faculty">Faculty</option>
                                   <option value="HOD">HOD</option>
@@ -37,10 +47,10 @@
                                   <option value="Library">Library</option>
                                   <option value="CC">CC</option>
                                   <option value="Gymkhana">Gymkhana</option>
-                                  <option value="Assistant_registrar">Registrar</option>
+                                  <option value="Assistant Registrar">Assistant Reistrar</option>
                                   <option value="Lab">Lab</option>
                                   <option value="OnlineCC">OnlineCC</option>
-                                  <option value="SubmitThesis">Thesis Manager</option>
+                                  <option value="Thesis Manager">Thesis Manager</option>
                                 </select>
                             </div>
                         </div>
@@ -64,5 +74,5 @@
     </div>
 
 </div>
-{% endblock %}
-
+</body>
+</html>

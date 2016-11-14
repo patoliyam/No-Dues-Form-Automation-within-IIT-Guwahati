@@ -95,7 +95,7 @@ class Warden(models.Model):
         return self.name
 
 class Assistant_registrar(models.Model):
-    name = models.CharField(max_length=250, default='Registrar')
+    name = models.CharField(max_length=250, default='Assi. Registrar')
     webmail = models.CharField(max_length=250, unique=True, blank=True)
     password = models.CharField(max_length=250,blank=True)
     def __str__(self):
@@ -131,14 +131,14 @@ class Gymkhana(models.Model):
         return self.name
 
 class OnlineCC(models.Model):
-    name = models.CharField(max_length=250, default='Account')
+    name = models.CharField(max_length=250, default='OnlineCC Manager')
     webmail = models.CharField(max_length=250, unique=True,blank=True)
     password = models.CharField(max_length=250,blank=True)
     def __str__(self):
         return self.name
 
 class SubmitThesis(models.Model):
-    name = models.CharField(max_length=250, default='Account')
+    name = models.CharField(max_length=250, default='Thesis Manager')
     webmail = models.CharField(max_length=250, unique=True,blank=True)
     password = models.CharField(max_length=250,blank=True)
     def __str__(self):

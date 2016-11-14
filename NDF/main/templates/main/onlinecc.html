@@ -1,27 +1,27 @@
 {% extends 'main/base.html' %}
 
 {% block title %}
-    {{ caretaker.name }}|Caretaker|Home Page
+    {{ onlinecc.name }}|Home Page
 {% endblock %}
 
 {% block heading %}
-    Students of {{ caretaker.hostel }}
+    Students
 {% endblock %}
 
 {% block form-action %}
-    {% url 'main:caretaker_profile'%}
+    {% url 'main:onlinecc_profile'%}
 {% endblock %}
 
 {% block NotApproved %}
       {%for stud in students %}
-          {% if stud.caretaker_approval is False %}
+          {% if stud.online_cc_approval is False %}
                          <p align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="{{ stud.webmail }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ stud.name }}</p>
           {% endif %}
       {% endfor %}
 {% endblock %}
 {% block Approved %}
       {%for stud in students %}
-          {% if stud.caretaker_approval is True %}
+          {% if stud.online_cc_approval is True %}
                          <p align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" checked name="{{ stud.webmail }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ stud.name }}</p>
           {% endif %}
       {% endfor %}
