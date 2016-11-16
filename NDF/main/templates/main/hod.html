@@ -1,7 +1,7 @@
 {% extends 'main/base.html' %}
 
 {% block title %}
-    {{ warden.name }}|Warden|Home Page
+    {{ hod.name }}|HOD|Home Page
 {% endblock %}
 
 {% block heading %}
@@ -14,15 +14,23 @@
 
 {% block NotApproved %}
       {%for stud in students %}
-          {% if stud.hod_approval is False %}
+          {% if stud.dept_status is True %}
+              {% if stud.lab_status is True %}
+                  {% if stud.HOD_approval is False %}
                          <p align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="{{ stud.webmail }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ stud.name }}</p>
-          {% endif %}
+                  {% endif %}
+              {% endif %}
+          {%endif%}
       {% endfor %}
 {% endblock %}
 {% block Approved %}
       {%for stud in students %}
-          {% if stud.hod_approval is True %}
-                         <p align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" checked name="{{ stud.webmail }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ stud.name }}</p>
-          {% endif %}
+          {% if stud.dept_status is True %}
+              {% if stud.lab_status is True %}
+                  {% if stud.HOD_approval is True %}
+                      <p align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" checked name="{{ stud.webmail }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ stud.name }}</p>
+                  {% endif %}
+              {% endif %}
+          {%endif%}
       {% endfor %}
 {% endblock %}

@@ -1,26 +1,26 @@
 {% extends 'main/base.html' %}
 
 {% block title %}
-    {{ gymkhana.name }}|Home Page
+    {{ account.name }}|Home Page
 {% endblock %}
 
 {% block heading %}
     Students{% endblock %}
 
 {% block form-action %}
-    {% url 'main:gymkhana_profile'%}
+    {% url 'main:account_profile'%}
 {% endblock %}
 
 {% block NotApproved %}
       {%for stud in students %}
-          {% if stud.caretaker_approval is False %}
+          {% if stud.account_approval is False %}
                          <p align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="{{ stud.webmail }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ stud.name }}</p>
           {% endif %}
       {% endfor %}
 {% endblock %}
 {% block Approved %}
       {%for stud in students %}
-          {% if stud.caretaker_approval is True %}
+          {% if stud.account_approval is True %}
                          <p align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" checked name="{{ stud.webmail }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ stud.name }}</p>
           {% endif %}
       {% endfor %}

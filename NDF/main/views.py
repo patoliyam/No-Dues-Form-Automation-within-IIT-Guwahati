@@ -29,7 +29,6 @@ def login_user(request):
                 role = str(role)
                 #print type(Student.webmail)
                 if role == "Student":
-                    student = Student.objects.get(webmail=username)
                     return redirect('/stud_profile')
                 elif role == "Faculty":
                     return redirect('/faculty_profile')
@@ -53,18 +52,32 @@ def login_user(request):
                     return redirect('/assireg_profile')
                 elif role == "HOD":
                     return redirect('/hod_profile')
+                elif role == "Account":
+                    return redirect('/account_profile')
                 else:
                     return render(request, 'main/login.html', {'error_message': 'Unsuccessful Login'})
+            else:
+                return render(request, 'main/login.html', {'error_message': 'Session Expired'})
         else:
-            return render(request, 'main/login.html', {'error_message': 'Invalid login'})
+            return render(request, 'main/login.html', {'error_message': 'Credentials Invalid'})
     return render(request, 'main/login.html',{'error_message': ''})
 
 def stud_profile(request):
     username=request.user.username
-    username=str(username)
+    try:
+        student = Student.objects.get(webmail=username)
+    except Student.DoesNotExist:
+        student = None
+    if student is None:
+        return render(request, 'main/login.html', {'error_message': 'Role mismatch'})
     student = Student.objects.get(webmail=username)
     return render(request, 'main/stud.html', {'error_message': 'valid login', 'student': student})
 
+def rules(request):
+    return render(request,'main/rules.html')
+
+def contact(request):
+    return render(request,'main/contact.html')
 
 def stud_full_dept(request):
     username = request.user.username
@@ -87,15 +100,18 @@ def stud_full_lab(request):
 def logout_user(request):
     logout(request)
     form = UserForm(request.POST or None)
-    context = {
-        "form": form,
-    }
-    return render(request, 'main/login.html', context)
+    return render(request, 'main/login.html', {"form": form})
 
 def faculty_profile(request):
     if request.method == "GET":
         username = request.user.username
-        fac = Faculty.objects.get(webmail=username)
+        try:
+            fac = Faculty.objects.get(webmail=username)
+        except Faculty.DoesNotExist:
+            fac = None
+        if fac is None:
+            return render(request, 'main/login.html', {'error_message': 'Role mismatch'})
+        #fac = Faculty.objects.get(webmail=username)
         dept = fac.department
         students = Student.objects.filter(department=dept)
         stud_fac_status = Stud_Faculty_Status.objects.filter(faculty=fac)
@@ -129,7 +145,13 @@ def faculty_profile(request):
 def lab_profile(request):
     if request.method == "GET":
         username = request.user.username
-        lab = Lab.objects.get(webmail=username)
+        try:
+            lab = Lab.objects.get(webmail=username)
+        except Lab.DoesNotExist:
+            lab = None
+        if lab is None:
+            return render(request, 'main/login.html', {'error_message': 'Role mismatch'})
+        #lab = Lab.objects.get(webmail=username)
         students = Student.objects.all()
         stud_lab_status = Stud_Lab_Status.objects.filter(lab=lab)
         return render(request, 'main/lab.html',
@@ -160,7 +182,13 @@ def lab_profile(request):
 def caretaker_profile(request):
     if request.method == "GET":
         username = request.user.username
-        caretaker = Caretaker.objects.get(webmail=username)
+        try:
+            caretaker = Caretaker.objects.get(webmail=username)
+        except Caretaker.DoesNotExist:
+            caretaker = None
+        if caretaker is None:
+            return render(request, 'main/login.html', {'error_message': 'Role mismatch'})
+        #caretaker = Caretaker.objects.get(webmail=username)
         hostel = caretaker.hostel
         students = Student.objects.filter(hostel=hostel)
         return render(request, 'main/caretaker.html',
@@ -182,7 +210,13 @@ def caretaker_profile(request):
 def warden_profile(request):
     if request.method == "GET":
         username = request.user.username
-        warden = Warden.objects.get(webmail=username)
+        try:
+            warden = Warden.objects.get(webmail=username)
+        except Warden.DoesNotExist:
+            warden = None
+        if warden is None:
+            return render(request, 'main/login.html', {'error_message': 'Role mismatch'})
+        #warden = Warden.objects.get(webmail=username)
         hostel = warden.hostel
         students = Student.objects.filter(hostel=hostel, caretaker_approval=True)
         return render(request, 'main/warden.html',
@@ -205,7 +239,13 @@ def warden_profile(request):
 def gymkhana_profile(request):
     if request.method == "GET":
         username = request.user.username
-        gymnkhana = Gymkhana.objects.get(webmail=username)
+        try:
+            gymnkhana = Gymkhana.objects.get(webmail=username)
+        except Gymkhana.DoesNotExist:
+            gymnkhana = None
+        if gymnkhana is None:
+            return render(request, 'main/login.html', {'error_message': 'Role mismatch'})
+        #gymnkhana = Gymkhana.objects.get(webmail=username)
         students = Student.objects.all()
         return render(request, 'main/gymkhana.html',
                       {'error_message': 'valid login', 'students': students, 'gymkhana': gymnkhana})
@@ -223,7 +263,13 @@ def gymkhana_profile(request):
 def onlinecc_profile(request):
     if request.method == "GET":
         username = request.user.username
-        onlinecc = OnlineCC.objects.get(webmail=username)
+        try:
+            onlinecc = OnlineCC.objects.get(webmail=username)
+        except OnlineCC.DoesNotExist:
+            onlinecc = None
+        if onlinecc is None:
+            return render(request, 'main/login.html', {'error_message': 'Role mismatch'})
+        #onlinecc = OnlineCC.objects.get(webmail=username)
         students = Student.objects.all()
         #print students
         return render(request, 'main/onlinecc.html',
@@ -242,9 +288,15 @@ def onlinecc_profile(request):
 def cc_profile(request):
     if request.method == "GET":
         username = request.user.username
-        cc = CC.objects.get(webmail=username)
+        try:
+            cc = CC.objects.get(webmail=username)
+        except CC.DoesNotExist:
+            cc = None
+        if cc is None:
+            return render(request, 'main/login.html', {'error_message': 'Role mismatch'})
+        #cc = CC.objects.get(webmail=username)
         students = Student.objects.filter(online_cc_approval=True)
-        return render(request, 'main/warden.html',
+        return render(request, 'main/cc.html',
                       {'error_message': 'valid login', 'students': students, 'cc': cc})
     elif request.method == "POST":
         students = Student.objects.filter(online_cc_approval=True)
@@ -260,7 +312,12 @@ def cc_profile(request):
 def thesis_manager_profile(request):
     if request.method == "GET":
         username = request.user.username
-        thesis_manager = SubmitThesis.objects.get(webmail=username)
+        try:
+            thesis_manager = SubmitThesis.objects.get(webmail=username)
+        except SubmitThesis.DoesNotExist:
+            thesis_manager = None
+        if thesis_manager is None:
+            return render(request, 'main/login.html', {'error_message': 'Role mismatch'})
         students = Student.objects.all()
         return render(request, 'main/thesis_manager.html',
                       {'error_message': 'valid login', 'students': students, 'thesis_manager':thesis_manager})
@@ -278,7 +335,13 @@ def thesis_manager_profile(request):
 def library_profile(request):
     if request.method == "GET":
         username = request.user.username
-        library = Library.objects.get(webmail=username)
+        try:
+            library = Library.objects.get(webmail=username)
+        except Library.DoesNotExist:
+            library = None
+        if library is None:
+            return render(request, 'main/login.html', {'error_message': 'Role mismatch'})
+        #library = Library.objects.get(webmail=username)
         students = Student.objects.filter(submit_thesis=True)
         return render(request, 'main/library.html',
                       {'error_message': 'valid login', 'students': students, 'library': library})
@@ -296,7 +359,13 @@ def library_profile(request):
 def assireg_profile(request):
     if request.method == "GET":
         username = request.user.username
-        assistant_registrar= Assistant_registrar.objects.get(webmail=username)
+        try:
+            assistant_registrar = Assistant_registrar.objects.get(webmail=username)
+        except Assistant_registrar.DoesNotExist:
+            assistant_registrar = None
+        if assistant_registrar is None:
+            return render(request, 'main/login.html', {'error_message': 'Role mismatch'})
+        #assistant_registrar= Assistant_registrar.objects.get(webmail=username)
         students = Student.objects.filter(caretaker_approval=True,warden_approval=True,gymkhana_approval=True)
         return render(request, 'main/assistant_registrar.html',
                       {'error_message': 'valid login', 'students': students, 'assistant_registrar': assistant_registrar})
@@ -314,10 +383,18 @@ def assireg_profile(request):
 def hod_profile(request):
     if request.method == "GET":
         username = request.user.username
-        hod = HOD.objects.get(webmail=username)
+        try:
+            hod = HOD.objects.get(webmail=username)
+        except HOD.DoesNotExist:
+            hod = None
+        if hod is None:
+            return render(request, 'main/login.html', {'error_message': 'Role mismatch'})
+        #hod = HOD.objects.get(webmail=username)
         students = Student.objects.filter(department=hod.department, assistant_registrar_approval=True,
-                                          dept_status=True,library_approval=True, CC_approval=True ,
-                                          lab_status=True)
+                                          library_approval=True, CC_approval=True)
+        # print students
+        # print 1
+                                          #lab_status=True, dept_status=True)
         return render(request, 'main/hod.html',
                       {'error_message': 'valid login', 'students': students,
                        'hod': hod})
@@ -325,14 +402,47 @@ def hod_profile(request):
         username = request.user.username
         hod = HOD.objects.get(webmail=username)
         students = Student.objects.filter(department=hod.department, assistant_registrar_approval=True,
-                                          dept_status=True, library_approval=True, CC_approval=True,
-                                          lab_status=True)
+                                          library_approval=True, CC_approval=True)
+        #print students[0].lab_status()
+
+        for stud in students:
+            print stud.name
+            print (stud.lab_status()is True)
+            if stud.lab_status() is True:
+                if stud.dept_status() is True:
+                    if request.POST.get(stud.webmail, "") == 'on':
+                        stud.HOD_approval = True
+                        stud.save()
+                    else:
+                        stud.HOD_approval = False
+                        stud.save()
+        return redirect('/hod_profile')
+
+def account_profile(request):
+    if request.method == "GET":
+        username = request.user.username
+        try:
+            account = Account.objects.get(webmail=username)
+        except Account.DoesNotExist:
+            account = None
+        if account is None:
+            return render(request, 'main/login.html', {'error_message': 'Role mismatch'})
+        #account = Account.objects.get(webmail=username)
+        students = Student.objects.filter(HOD_approval=True)
+        print students
+        return render(request, 'main/account.html',
+                      {'error_message': 'valid login', 'students': students, 'account': account})
+    elif request.method == "POST":
+        students = Student.objects.filter(HOD_approval=True)
+        print students
         for stud in students:
             if request.POST.get(stud.webmail, "") == 'on':
-                stud.hod_approval = True
+                print stud.name
+                stud.account_approval = True
                 stud.save()
             else:
-                stud.hod_approval = False
+                print stud.name
+                stud.account_approval = False
                 stud.save()
-        return redirect('/hod_profile')
+        return redirect('/account_profile')
 # Create your views here.
