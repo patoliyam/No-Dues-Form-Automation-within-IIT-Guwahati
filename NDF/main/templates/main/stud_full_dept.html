@@ -40,15 +40,33 @@
     <div class="col-sm-9">
       <div class="well">
         <h4>Details :</h4>
+            <p>
+                <div class="col-sm-4"><b>Faculty : Status</b>
+                </div>
+                <div class="col-sm-7"><b>
+                Remarks</b>
+                </div>
+                <br>
+            </p>
+
         {%for i in Stud_Faculty_Status %}
             {% if i.faculty.department == i.student.department %}
             <p>
-                {{ i.faculty.name }} :
+                <div class="col-sm-4">{{ i.faculty.name }} :
                 {% if i.faculty_approval is True %}
-                    Approved
+                    <span style="color: #11B54A">Approved</span>
                 {%else%}
-                    Not Approved
+                    <span style="color:#e92916">Not Approved</span>
+                    {% endif %}
+                </div>
+                <div class="col-sm-7">
+                {% if i.faculty_approval is True %}
+                    {{ i.faculty_remarks }}
+                {%else%}
+                    {{ i.faculty_remarks }}
                 {% endif %}
+                </div>
+                <br>
             </p>
             {% endif %}
           {% endfor %}

@@ -13,7 +13,7 @@ class Stud_Lab_StatusInline(admin.TabularInline):
 class FacultyAdmin(admin.ModelAdmin):
     search_fields = ['name']
     inlines = (Stud_Faculty_StatusInline,)
-    list_display = ('name','department',)
+    list_display = ('name','webmail','department',)
 
 class LabAdmin(admin.ModelAdmin):
     search_fields = ['name','webmail',]
@@ -22,7 +22,7 @@ class LabAdmin(admin.ModelAdmin):
 
 class StudentAdmin(admin.ModelAdmin):
     search_fields = ['roll_no']
-    list_display = ('name',)
+    list_display = ('name','webmail','roll_no','department','hostel',)
     inlines = (Stud_Faculty_StatusInline,Stud_Lab_StatusInline,)
     filter_horizontal = ('faculty_approval', 'lab_approval',)
 

@@ -65,6 +65,7 @@ class Stud_Faculty_Status(models.Model):
     faculty = models.ForeignKey(Faculty,on_delete=models.CASCADE)
     student = models.ForeignKey(Student,on_delete=models.CASCADE)
     faculty_approval = models.BooleanField(default = False)
+    faculty_remarks= models.CharField(max_length=250, blank=True)
 
     def __str__(self):
         return self.student.name

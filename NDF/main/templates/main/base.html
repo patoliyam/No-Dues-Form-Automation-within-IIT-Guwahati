@@ -7,6 +7,17 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        function checkAll(bx){
+            var form = bx.form;
+            var ischecked = bx.checked;
+            for (var i = 0; i < form.length; ++i) {
+                if (form[i].type == 'checkbox') {
+                    form[i].checked = ischecked;
+                }
+    }
+
+}</script>
 
   <style>
     /* Remove the navbar's default margin-bottom and rounded borders */
@@ -34,7 +45,7 @@
     footer {
       background-color: #555;
       color: white;
-      padding: 15px;
+        padding: 15px;
     }
 
     /* On small screens, set height to 'auto' for sidenav and grid */
@@ -80,6 +91,10 @@
 	      <h4>Not Approved</h4>
 	      <hr>
 	      <div class = "check-left">
+          <p align="left">
+                        <div class="col-sm-4 text-left" >&nbsp;<input type="checkbox" onclick="checkAll(this)">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Select All</div>
+                        <br>
+          </p>
 {% block NotApproved %}
 
 {% endblock %}
@@ -92,6 +107,10 @@
 
 	      <hr>
 	        <div class = "check-right">
+            {% comment %}<p align="left">
+                        <div class="col-sm-4 text-left" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" onclick="checkAll(this)">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unselect All</div>
+                        <br>
+          </p>{% endcomment %}
 {% block Approved %}
 {% endblock %}
             </div>

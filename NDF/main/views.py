@@ -54,6 +54,8 @@ def login_user(request):
                     return redirect('/hod_profile')
                 elif role == "Account":
                     return redirect('/account_profile')
+                elif role == "Admin":
+                    return redirect('/admin')
                 else:
                     return render(request, 'main/login.html', {'error_message': 'Unsuccessful Login'})
             else:
@@ -74,10 +76,20 @@ def stud_profile(request):
     return render(request, 'main/stud.html', {'error_message': 'valid login', 'student': student})
 
 def rules(request):
-    return render(request,'main/rules.html')
+    username=request.user.username
+    try:
+        student = Student.objects.get(webmail=username)
+    except Student.DoesNotExist:
+        student = None
+    return render(request,'main/rules.html', {'student':student})
 
 def contact(request):
-    return render(request,'main/contact.html')
+    username = request.user.username
+    try:
+        student = Student.objects.get(webmail=username)
+    except Student.DoesNotExist:
+        student = None
+    return render(request, 'main/contact.html', {'student': student})
 
 def stud_full_dept(request):
     username = request.user.username
@@ -126,10 +138,14 @@ def faculty_profile(request):
         stud_fac_status = Stud_Faculty_Status.objects.filter(faculty=fac)
         for stud in students:
             for i in stud_fac_status :
-                if i.student.name == stud.name:
+                if i.student.webmail == stud.webmail:
+                    remarks = request.POST[str(stud.roll_no)]
+                    print type(remarks)
+                    print remarks
                     if request.POST.get(stud.webmail,"") == 'on':
                         x=Stud_Faculty_Status.objects.get(student=stud, faculty=fac)
                         x.faculty_approval=True
+                        x.faculty_remarks=remarks
                         x.save()
                         #stud.save()
                         #print Stud_Faculty_Status.objects.get(student=stud, faculty=fac).faculty_approval
@@ -137,8 +153,11 @@ def faculty_profile(request):
                         x = Stud_Faculty_Status.objects.get(student=stud, faculty=fac)
                         print x
                         x.faculty_approval=False
+                        stud.HOD_approval=False
+                        stud.account_approval=False
+                        x.faculty_remarks = remarks
+                        stud.save()
                         x.save()
-
                         #print Stud_Faculty_Status.objects.get(student=stud, faculty=fac).faculty_approval
         return redirect('/faculty_profile')
 
@@ -163,7 +182,7 @@ def lab_profile(request):
         stud_lab_status = Stud_Lab_Status.objects.filter(lab=lab)
         for stud in students:
             for i in stud_lab_status :
-                if i.student.name == stud.name:
+                if i.student.webmail == stud.webmail:
                     if request.POST.get(stud.webmail,"") == 'on':
                         x=Stud_Lab_Status.objects.get(student=stud, lab=lab)
                         x.lab_approval=True
@@ -172,8 +191,11 @@ def lab_profile(request):
                         #print Stud_Faculty_Status.objects.get(student=stud, faculty=fac).faculty_approval
                     else :
                         x = Stud_Lab_Status.objects.get(student=stud, lab=lab)
-                        #print x
+                        print x.student
                         x.lab_approval=False
+                        stud.HOD_approval=False
+                        stud.account_approval=False
+                        stud.save()
                         x.save()
 
                         #print Stud_Faculty_Status.objects.get(student=stud, faculty=fac).faculty_approval
@@ -204,6 +226,10 @@ def caretaker_profile(request):
                 stud.save()
             else :
                 stud.caretaker_approval = False
+                stud.warden_approval=False
+                stud.assistant_registrar_approval=False
+                stud.HOD_approval=False
+                stud.account_approval=False
                 stud.save()
         return redirect('/caretaker_profile')
 
@@ -233,6 +259,9 @@ def warden_profile(request):
                 stud.save()
             else:
                 stud.warden_approval = False
+                stud.assistant_registrar_approval=False
+                stud.HOD_approval=False
+                stud.account_approval=False
                 stud.save()
         return redirect('/warden_profile')
 
@@ -257,6 +286,9 @@ def gymkhana_profile(request):
                 stud.save()
             else:
                 stud.gymkhana_approval = False
+                stud.assistant_registrar_approval=False
+                stud.HOD_approval=False
+                stud.account_approval=False
                 stud.save()
             return redirect('/gymkhana_profile')
 
@@ -282,6 +314,9 @@ def onlinecc_profile(request):
                 stud.save()
             else:
                 stud.online_cc_approval = False
+                stud.CC_approval=False
+                stud.HOD_approval=False
+                stud.account_approval=False
                 stud.save()
         return redirect('/onlinecc_profile')
 
@@ -296,16 +331,19 @@ def cc_profile(request):
             return render(request, 'main/login.html', {'error_message': 'Role mismatch'})
         #cc = CC.objects.get(webmail=username)
         students = Student.objects.filter(online_cc_approval=True)
+        print students
         return render(request, 'main/cc.html',
                       {'error_message': 'valid login', 'students': students, 'cc': cc})
     elif request.method == "POST":
         students = Student.objects.filter(online_cc_approval=True)
         for stud in students:
             if request.POST.get(stud.webmail, "") == 'on':
-                stud.cc_approval = True
+                stud.CC_approval = True
                 stud.save()
             else:
-                stud.cc_approval = False
+                stud.CC_approval = False
+                stud.HOD_approval=False
+                stud.account_approval=False
                 stud.save()
         return redirect('/cc_profile')
 
@@ -329,6 +367,9 @@ def thesis_manager_profile(request):
                 stud.save()
             else:
                 stud.submit_thesis = False
+                stud.library_approval=False
+                stud.HOD_approval=False
+                stud.account_approval=False
                 stud.save()
         return redirect('/thesis_manager_profile')
 
@@ -353,6 +394,8 @@ def library_profile(request):
                 stud.save()
             else:
                 stud.library_approval = False
+                stud.HOD_approval=False
+                stud.account_approval=False
                 stud.save()
         return redirect('/library_profile')
 
@@ -377,6 +420,8 @@ def assireg_profile(request):
                 stud.save()
             else:
                 stud.assistant_registrar_approval = False
+                stud.HOD_approval=False
+                stud.account_approval=False
                 stud.save()
         return redirect('/assireg_profile')
 
@@ -415,6 +460,7 @@ def hod_profile(request):
                         stud.save()
                     else:
                         stud.HOD_approval = False
+                        stud.account_approval=False
                         stud.save()
         return redirect('/hod_profile')
 

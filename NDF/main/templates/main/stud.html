@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
   <title>Student Homepage</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -38,15 +39,30 @@
     <br>
 
     <div class="col-sm-9">
+    <div class="row">
+        <div class="col-sm-12">
+          <div class="well">
+            <h4>Details</h4>
+            <p>
+              <ul>
+            <li><b>Name &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp:&nbsp&nbsp</b>{{ student.name }}</li>
+            <li><b>Webmail &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp:&nbsp&nbsp</b>{{ student.webmail }}</li>
+            <li><b>Department&nbsp:&nbsp&nbsp</b>{{ student.department }}</li>
+            <li><b>Hostel &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp:&nbsp&nbsp</b>{{ student.hostel }}</li>
+            </ul>
+              </p>
+          </div>
+        </div>
+    </div>
         <div class="row">
         <div class="col-sm-3">
           <div class="well">
             <h4>Caretaker</h4>
             <p>
                 {% if student.caretaker_approval is True %}
-                    Approved
+                    <span style="color: #11B54A">Approved</span>
                 {%else%}
-                    Not Approved
+                    <span style="color:#e92916">Not Approved</span>
                 {% endif %}
             </p>
           </div>
@@ -55,9 +71,9 @@
           <div class="well">
             <h4>Warden</h4>
             <p>{% if student.warden_approval is True %}
-                    Approved
+                    <span style="color: #11B54A">Approved</span>
                 {%else%}
-                    Not Approved
+                    <span style="color:#e92916">Not Approved</span>
                 {% endif %}</p>
           </div>
         </div>
@@ -65,9 +81,9 @@
           <div class="well">
             <h4>Gymkhana</h4>
             <p>{% if student.gymkhana_approval is True %}
-                    Approved
+                    <span style="color: #11B54A">Approved</span>
                 {%else%}
-                    Not Approved
+                    <span style="color:#e92916">Not Approved</span>
                 {% endif %}</p>
           </div>
         </div>
@@ -76,9 +92,9 @@
             <h4>Assistant Registrar</h4>
             <p>
                 {% if student.assistant_registrar_approval is True %}
-                    Approved
+                    <span style="color: #11B54A">Approved</span>
                 {%else%}
-                    Not Approved
+                    <span style="color:#e92916">Not Approved</span>
                 {% endif %}
             </p>
           </div>
@@ -90,9 +106,9 @@
                <h4>Submit Thesis</h4>
                 <p>
                     {% if student.submit_thesis is True %}
-                        Approved
+                        <span style="color: #11B54A">Approved</span>
                     {%else%}
-                        Not Approved
+                        <span style="color:#e92916">Not Approved</span>
                     {% endif %}
                 </p>
           </div>
@@ -102,9 +118,9 @@
                <h4>Library</h4>
                 <p>
                     {% if student.library_approval is True %}
-                        Approved
+                        <span style="color: #11B54A">Approved</span>
                     {%else%}
-                        Not Approved
+                        <span style="color:#e92916">Not Approved</span>
                     {% endif %}
                 </p>
           </div>
@@ -114,9 +130,9 @@
                <h4>Online CC</h4>
                 <p>
                     {% if student.online_cc_approval is True %}
-                        Approved
+                        <span style="color: #11B54A">Approved</span>
                     {%else%}
-                        Not Approved
+                        <span style="color:#e92916">Not Approved</span>
                     {% endif %}
                 </p>
           </div>
@@ -128,9 +144,9 @@
                <h4>CC</h4>
                 <p>
                     {% if student.CC_approval is True %}
-                        Approved
+                        <span style="color: #11B54A">Approved</span>
                     {%else%}
-                        Not Approved
+                        <span style="color:#e92916">Not Approved</span>
                     {% endif %}
                 </p>
           </div>
@@ -140,9 +156,9 @@
                <h4>Department</h4>
                 <p>
                     {% if student.dept_status is True %}
-                        Approved
+                        <span style="color: #11B54A">Approved</span>
                     {%else%}
-                        Not Approved
+                        <span style="color:#e92916">Not Approved</span>
                     {% endif %}
                 </p>
           </div>
@@ -152,9 +168,9 @@
                <h4>Lab/Workshop</h4>
                 <p>
                     {% if student.lab_status is True %}
-                        Approved
+                        <span style="color: #11B54A">Approved</span>
                     {%else%}
-                        Not Approved
+                        <span style="color:#e92916">Not Approved</span>
                     {% endif %}
                 </p>
           </div>
@@ -166,9 +182,9 @@
            <h4>HOD</h4>
                 <p>
                     {% if student.HOD_approval is True %}
-                        Approved
+                        <span style="color: #11B54A">Approved</span>
                     {%else%}
-                        Not Approved
+                        <span style="color:#e92916">Not Approved</span>
                     {% endif %}
                 </p>
           </div>
@@ -180,9 +196,9 @@
            <h4>Account</h4>
                 <p>
                     {% if student.account_approval is True %}
-                        Approved
+                        <span style="color: #11B54A">Approved</span>
                     {%else%}
-                        Not Approved
+                        <span style="color:#e92916">Not Approved</span>
                     {% endif %}
                 </p>
           </div>
